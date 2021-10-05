@@ -1,6 +1,6 @@
 $(document).ready(function() {
-   const apiRoot = 'https://fathomless-reaches-22846.herokuapp.com/v1/task/';
-   const trelloApiRoot = 'https://fathomless-reaches-22846.herokuapp.com/v1/trello/';
+   const apiRoot = 'https://fathomless-reaches-22846.herokuapp.com/v1';
+   const trelloApiRoot = 'https://fathomless-reaches-22846.herokuapp.com/v1/trello';
    const datatableRowTemplate = $('[data-datatable-row-template]').children()[0];
    const $tasksContainer = $('[data-tasks-container]');
 
@@ -12,10 +12,9 @@ $(document).ready(function() {
    getAllTasks();
 
    function getAllAvailableBoards(callback, callbackArgs) {
-      var requestUrl = trelloApiRoot + 'getTrelloBoards';
 
       $.ajax({
-         url: requestUrl,
+         url: trelloApiRoot + '/boards',
          method: 'GET',
          contentType: 'application/json',
          success: function(boards) { callback(callbackArgs, boards); }
@@ -63,10 +62,9 @@ $(document).ready(function() {
    }
 
    function getAllTasks() {
-      const requestUrl = apiRoot + 'getTasks';
 
       $.ajax({
-         url: requestUrl,
+         url: apiRoot + '/tasks',
          method: 'GET',
          contentType: "application/json",
          success: function(tasks) {
@@ -86,7 +84,7 @@ $(document).ready(function() {
       var taskContent = parentEl.find('[data-task-content-input]').val();
 
       $.ajax({
-         url: apiRoot,
+         url: apiRoot + '/tasks',
          method: "PUT",
          processData: false,
          contentType: "application/json; charset=utf-8",
@@ -110,7 +108,7 @@ $(document).ready(function() {
       var taskId = parentEl.attr('data-task-id');
     
       $.ajax({
-         url: apiRoot + '/' + taskId,
+         url: apiRoot + '/tasks/' + taskId,
          method: 'DELETE',
          success: function() {
             parentEl.slideUp(400, function() { parentEl.remove(); });
@@ -125,7 +123,7 @@ $(document).ready(function() {
       var taskContent = $(this).find('[name="content"]').val();
 
       $.ajax({
-         url: apiRoot,
+         url: apiRoot + '/tasks',
          method: 'POST',
          processData: false,
          contentType: "application/json; charset=utf-8",
@@ -163,7 +161,6 @@ $(document).ready(function() {
    }
 
    function handleCardCreationRequest(event) {
-      var requestUrl = trelloApiRoot + 'createTrelloCard';
       var $relatedTaskRow = $(event.target).parents('[data-task-id]');
       var relatedTaskId = $relatedTaskRow.attr('data-task-id');
       var relatedTask = availableTasks[relatedTaskId];
@@ -175,7 +172,7 @@ $(document).ready(function() {
       }
 
       $.ajax({
-         url: requestUrl,
+         url: trelloApiRoot + '/cards',
          method: 'POST',
          processData: false,
          contentType: "application/json; charset=utf-8",
